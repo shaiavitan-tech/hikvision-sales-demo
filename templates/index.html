@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hikvision Sales Booster Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    .hk-navbar {
+      background: linear-gradient(90deg, #b30000, #e60000);
+    }
+    .hk-navbar .navbar-brand {
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .hk-section-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .hk-badge {
+      border-radius: 999px;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+    }
+    .hk-summary-bar {
+      background-color: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.05);
+      padding: 0.75rem 1.25rem;
+    }
+    .hk-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.75rem;
+      background-color: #f1f1f1;
+      margin-inline-end: 0.3rem;
+      margin-bottom: 0.15rem;
+    }
+    .hk-chip i {
+      margin-inline-end: 0.25rem;
+    }
+    .hk-step {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+    }
+    .hk-highlight {
+      color: #e60000;
+      font-weight: 600;
+    }
+    .hk-pill-btn {
+      border-radius: 999px;
+      padding-inline: 1.5rem;
+    }
+    .hk-card-header-small {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-dark hk-navbar mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <i class="bi bi-camera-video me-1"></i>
+        Hikvision Sales Booster
+      </a>
+      <span class="navbar-text d-none d-md-inline">
+        דמו להגדלת מכירות ללקוחות קיימים
+      </span>
+    </div>
+  </nav>
+
+  <div class="container mb-4">
+
+    <!-- כותרת כללית/שלב -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <div class="hk-step">שלב 1</div>
+            <div class="hk-section-title">בחר לקוח לדוגמה</div>
+          </div>
+          <div class="text-end">
+            <span class="badge bg-light text-dark border">
+              <i class="bi bi-people me-1"></i>
+              מיועד לאנשי מכירות – ללא צורך בידע טכני
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- מסך 1: בחירת לקוח (dropdown + חיפוש) -->
+    <div id="view-select-customer" class="mb-4">
+      <div class="row g-3 justify-content-center">
+        <div class="col-12 col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="mb-3">
+                <div class="small text-muted mb-1">
+                  בחר לקוח פיקטיבי כדי להדגים איך המערכת מציעה הרחבות ומוצרים משלימים.
+                </div>
+              </div>
+
+              <!-- שורת חיפוש -->
+              <div class="mb-3">
+                <label class="form-label small mb-1">חיפוש לקוח</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-search"></i>
+                  </span>
+                  <input type="text"
+                         class="form-control"
+                         id="customer-search"
+                         placeholder="הקלד שם לקוח או סוג עסק..."
+                         oninput="filterCustomerOptions()" />
+                </div>
+              </div>
+
+              <!-- בחירת לקוח מרשימה -->
+              <div class="mb-3">
+                <label class="form-label small mb-1">בחר לקוח</label>
+                <select class="form-select" id="customer-select">
+                  <option value="">בחר לקוח...</option>
+                  <option value="home">משפחת כהן – בית פרטי (לקוח פרטי)</option>
+                  <option value="store">“שיק שיק” – חנות אופנה (עסק קטן)</option>
+                  <option value="office">“קוד־טק” – משרד הייטק קטן (משרד)</option>
+                  <option value="warehouse">“לוגי־פרו” – מחסן לוגיסטי (מחסן)</option>
+                </select>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="small text-muted">
+                  לאחר הבחירה תוצג המערכת הקיימת והמלצות להגדלת העסקה.
+                </span>
+                <button class="btn btn-danger hk-pill-btn"
+                        type="button"
+                        onclick="onSelectCustomerClick()">
+                  המשך
+                  <i class="bi bi-arrow-left ms-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- מסך 2+3: מה יש ללקוח + המלצות -->
+    <div id="view-customer-detail" class="mb-4 d-none">
+      <div class="row g-3">
+        <!-- עמודה שמאל: מערכת קיימת -->
+        <div class="col-12 col-lg-5">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                  <div class="hk-card-header-small">מה יש ללקוח היום</div>
+                  <h6 class="mb-0" id="cust-name"></h6>
+                </div>
+                <span class="badge bg-light text-dark border" id="cust-segment"></span>
+              </div>
+              <hr/>
+              <div id="cust-installed-list" class="mb-3 small">
+                <!-- ימולא ב-JS -->
+              </div>
+              <div class="alert alert-light border small mb-0">
+                <i class="bi bi-info-circle me-1"></i>
+                זהו בסיס השיחה עם הלקוח: מה כבר קיים, ואיפה אפשר לשדרג.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- עמודה ימין: המלצות -->
+        <div class="col-12 col-lg-7">
+          <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                  <div class="hk-card-header-small">
+                    הזדמנויות Upsell & Cross-sell
+                  </div>
+                  <h6 class="mb-0">הצעות הרחבה ללקוח</h6>
+                </div>
+              </div>
+
+              <!-- סרגל סיכום -->
+              <div class="hk-summary-bar mb-3">
+                <div class="row align-items-center gy-2">
+                  <div class="col-12 col-md-4">
+                    <div class="small text-muted">שווי מערכת קיימת (הערכה)</div>
+                    <div class="fw-semibold">
+                      ₪ <span id="summary-current">0</span>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="small text-muted">תוספת מוצעת</div>
+                    <div class="fw-semibold hk-highlight">
+                      ₪ <span id="summary-additional">0</span>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="small text-muted">הגדלת עסקה</div>
+                    <div class="fw-semibold">
+                      <span id="summary-percent">0</span>%
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- חבילות המלצה -->
+              <div id="recommendation-packages" class="flex-grow-1">
+                <!-- ימולא ב-JS -->
+              </div>
+
+              <div class="mt-3 d-flex justify-content-between small text-muted">
+                <span>
+                  ניתן לסמן/לבטל מוצרים בחבילות כדי לראות השפעה על הסכום.
+                </span>
+                <button class="btn btn-outline-secondary btn-sm hk-pill-btn"
+                        onclick="backToSelect()">
+                  <i class="bi bi-arrow-right-circle me-1"></i>
+                  חזרה לבחירת לקוח
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bootstrap JS + Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- לוגיקת UI (מחוברת ל-Flask API) -->
+  <script>
+    let currentCustomer = null;
+
+    // בחירת לקוח מה-dropdown
+    function onSelectCustomerClick() {
+      const select = document.getElementById("customer-select");
+      const id = select.value;
+      if (!id) {
+        alert("בחר לקוח מהרשימה קודם");
+        return;
+      }
+      selectCustomer(id);
+    }
+
+    // סינון רשימת הלקוחות לפי חיפוש
+    function filterCustomerOptions() {
+      const query = (document.getElementById("customer-search").value || "").trim();
+      const select = document.getElementById("customer-select");
+      const options = select.querySelectorAll("option");
+
+      if (!query) {
+        options.forEach(opt => opt.classList.remove("d-none"));
+        return;
+      }
+
+      const q = query.toLowerCase();
+      options.forEach(opt => {
+        if (!opt.value) {
+          opt.classList.remove("d-none");
+          return;
+        }
+        const text = opt.textContent.toLowerCase();
+        if (text.includes(q)) {
+          opt.classList.remove("d-none");
+        } else {
+          opt.classList.add("d-none");
+        }
+      });
+    }
+
+    // טעינת פרטי לקוח + מעבר למסך ההמלצות
+    async function selectCustomer(id) {
+      try {
+        const res = await fetch(`/api/customer/${id}`);
+        if (!res.ok) {
+          alert("בעיה בטעינת פרטי הלקוח");
+          return;
+        }
+        const data = await res.json();
+        currentCustomer = data;
+
+        document.getElementById("cust-name").textContent = data.name;
+        document.getElementById("cust-segment").textContent = data.segment;
+
+        const listEl = document.getElementById("cust-installed-list");
+        listEl.innerHTML = "";
+        data.installed.forEach(item => {
+          const row = document.createElement("div");
+          row.className = "d-flex justify-content-between align-items-center mb-2";
+          const name = document.createElement("div");
+          name.innerHTML = `
+            <div class="fw-semibold small">${item.name}</div>
+            <div class="small text-muted">כמות: ${item.count}</div>
+          `;
+          const price = document.createElement("div");
+          price.innerHTML = `
+            <span class="small text-muted">~ ₪ ${item.total_price.toLocaleString()}</span>
+          `;
+          row.appendChild(name);
+          row.appendChild(price);
+          listEl.appendChild(row);
+        });
+
+        document.getElementById("summary-current").textContent =
+          data.current_value.toLocaleString();
+        document.getElementById("summary-additional").textContent = "0";
+        document.getElementById("summary-percent").textContent = "0";
+
+        document.getElementById("view-select-customer").classList.add("d-none");
+        document.getElementById("view-customer-detail").classList.remove("d-none");
+
+        // טעינת המלצות אוטומטית
+        await showRecommendations();
+      } catch (e) {
+        console.error(e);
+        alert("שגיאת תקשורת עם השרת");
+      }
+    }
+
+    function backToSelect() {
+      document.getElementById("view-select-customer").classList.remove("d-none");
+      document.getElementById("view-customer-detail").classList.add("d-none");
+    }
+
+    // הבאת חבילות המלצה מה-Backend
+    async function showRecommendations() {
+      if (!currentCustomer) return;
+      try {
+        const res = await fetch(`/api/recommendations/${currentCustomer.id}`);
+        if (!res.ok) {
+          alert("בעיה בטעינת המלצות");
+          return;
+        }
+        const data = await res.json();
+        const container = document.getElementById("recommendation-packages");
+        container.innerHTML = "";
+
+        if (!data.packages || data.packages.length === 0) {
+          container.innerHTML = `
+            <div class="alert alert-light border small">
+              <i class="bi bi-info-circle me-1"></i>
+              לא נמצאו חבילות מומלצות עבור לקוח זה בדמו.
+            </div>
+          `;
+          updateAdditionalTotalFromDOM();
+          return;
+        }
+
+        data.packages.forEach(pkg => {
+          const card = document.createElement("div");
+          card.className = "card mb-3";
+          card.innerHTML = `
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                  <div class="hk-card-header-small">${pkg.tagline || ""}</div>
+                  <h6 class="mb-0">${pkg.title}</h6>
+                </div>
+                <span class="badge bg-light text-dark border">
+                  ₪ ${pkg.totalPrice.toLocaleString()}
+                </span>
+              </div>
+              <p class="small mb-2">${pkg.description || ""}</p>
+              <div class="mb-2">
+                ${(pkg.benefits || [])
+                  .map(b => `<span class="hk-chip"><i class="bi bi-check2"></i>${b}</span>`)
+                  .join("")}
+              </div>
+
+              ${pkg.sales_script
+                ? `
+                <div class="alert alert-light border small mb-2">
+                  <div class="fw-semibold mb-1">
+                    <i class="bi bi-chat-dots me-1"></i>
+                    הצעה לשיחת מכירה:
+                  </div>
+                  <div style="white-space: pre-line;">${pkg.sales_script}</div>
+                </div>
+                `
+                : ""
+              }
+
+              <div class="small text-muted mb-2">מוצרים בחבילה:</div>
+
+              <div class="small">
+                ${pkg.items
+                  .map(
+                    it => `
+                  <div class="form-check mb-1">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           checked
+                           data-price="${it.price}"
+                           onchange="onItemToggle(this)">
+                    <label class="form-check-label">
+                      ${it.name} – ~ ₪ ${it.price.toLocaleString()}
+                    </label>
+                  </div>
+                `
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        updateAdditionalTotalFromDOM();
+      } catch (e) {
+        console.error(e);
+        alert("שגיאת תקשורת עם השרת");
+      }
+    }
+
+    function onItemToggle(checkbox) {
+      updateAdditionalTotalFromDOM();
+    }
+
+    function updateAdditionalTotalFromDOM() {
+      const checkboxes = document.querySelectorAll(
+        "#recommendation-packages input[type='checkbox']"
+      );
+      let additional = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          additional += Number(cb.getAttribute("data-price")) || 0;
+        }
+      });
+
+      const current =
+        Number(
+          document
+            .getElementById("summary-current")
+            .textContent.replace(/,/g, "")
+        ) || 0;
+
+      document.getElementById("summary-additional").textContent =
+        additional.toLocaleString();
+      const percent = current > 0 ? Math.round((additional / current) * 100) : 0;
+      document.getElementById("summary-percent").textContent = percent;
+    }
+  </script>
+</body>
+</html>
